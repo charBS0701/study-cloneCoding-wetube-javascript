@@ -14,6 +14,7 @@ morgan.token("id", function getId(req) {
 });
 
 app.set("view engine", "pug");
+app.set("views", process.cwd() + "/src/views");
 
 app.use(assignId);
 app.use(morgan(":id :method :url :response-time"));
