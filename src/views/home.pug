@@ -1,7 +1,12 @@
 extends base.pug
 include mixins/video
 
-block content 
+block content
+    nav 
+        ul 
+            li 
+                a(href="/videos/upload") Upload Video
+
     h2 Welcome here you will see the trending videos
     each potato in videos
         +video(potato)

@@ -7,7 +7,7 @@
     "url": "git+https://github.com/charBS0701/wetube-reloaded.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/server.js"
+    "dev": "nodemon --exec babel-node src/init.js"
   },
   "author": "BONGSEOK CHA",
   "license": "ISC",
@@ -17,6 +17,7 @@
   "homepage": "https://github.com/charBS0701/wetube-reloaded#readme",
   "dependencies": {
     "express": "^4.18.1",
+    "mongoose": "^6.6.0",
     "morgan": "^1.10.0",
     "pug": "^3.0.2",
     "rotating-file-stream": "^3.0.4",
