@@ -1,13 +1,18 @@
 import Video from "../models/Video";
 
+/*
+console.log("start");
+Video.find({}, (error, videos) => {
+  return res.render("home", { pageTitle: "Home", videos});
+});
+console.log("finished");
+*/
+
 /** 홈화면에서 추천 영상을 띄워주는 함수 */
-export const home = (req, res) => {
-  Video.find({}, (error, videos) => {
-    console.log("errors", error);
-    console.log("videos", videos);
-  });
-  console.log("hello");
-  return res.render("home", { pageTitle: "Home", videos: [] });
+export const home = async (req, res) => {
+  const videos = await Video.find({});
+  console.log(videos);
+  return res.render("home", { pageTitle: "Home", videos });
 };
 
 export const watch = (req, res) => {
@@ -28,7 +33,18 @@ export const getUpload = (req, res) => {
   return res.render("upload", { pageTitle: "Upload Video" });
 };
 
-export const postUpload = (req, res) => {
-  const { title } = req.body;
+export const postUpload = async (req, res) => {
+  const { title, description, hashtags } = req.body;
+  const video = new Video({
+    title,
+    description,
+    createdAt: Date.now(),
+    hashtags: hashtags.split(",").map((word) => `#${word}`),
+    meta: {
+      views: 0,
+      rating: 0,
+    },
+  });
+  const dbVideo = await video.save();
   return res.redirect("/");
 };
