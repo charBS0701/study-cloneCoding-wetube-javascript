@@ -17,6 +17,8 @@
   "homepage": "https://github.com/charBS0701/wetube-reloaded#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "connect-mongo": "^4.6.0",
+    "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
     "mongodb": "^4.11.0",
