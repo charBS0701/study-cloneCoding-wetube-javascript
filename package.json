@@ -24,6 +24,8 @@
     "mongodb": "^4.11.0",
     "mongoose": "^6.6.0",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^2.6.1",
     "pug": "^3.0.2",
     "rotating-file-stream": "^3.0.4",
     "short-uuid": "^4.2.0"
