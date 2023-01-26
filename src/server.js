@@ -20,8 +20,9 @@ app.use(
   session({
     secret: process.env.COOKIE_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: false, // 수정되지 않은 세션 저장 false
     store: MongoStore.create({
+      // 서버의 메모리가 아닌 mongodb에 세션저장
       mongoUrl: process.env.DB_URL,
     }),
   })

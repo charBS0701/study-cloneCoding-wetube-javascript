@@ -12,6 +12,7 @@ export const postJoin = async (req, res) => {
       errorMessage: "Password confirmation does not match",
     });
   }
+  // 이미 존재하는 username이거나 email인 경우
   const exists = await User.exists({
     $or: [{ username: username }, { email }],
   });
@@ -29,7 +30,7 @@ export const postJoin = async (req, res) => {
       password,
       location,
     });
-    return res.redirect("/getLogin");
+    return res.redirect("/login");
   } catch (error) {
     return res.status(400).render("join", {
       pageTitle,
@@ -148,5 +149,69 @@ export const logout = (req, res) => {
   return res.redirect("/");
 };
 
-export const edit = (req, res) => res.send("Edit User");
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+// Edit profile
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id, username: sessionUsername, email: sessionEmail },
+    },
+    body: { name, email, username, location },
+  } = req; // const id = req.session.user.id 와 동일
+  // const { name, email, username, location } = req.body; 도 함께 넣을 수 있음
+
+  // 바꾼 username 또는 email이 db에 존재 할 경우 못바꾸게 해야함
+  // useername을 바꾼 경우
+  if (username != sessionUsername) {
+    if (await User.exists({ username })) {
+      return res.status(400).render("edit-profile", {
+        pageTitle: "Error",
+        errorMessage: "This username is already taken.",
+      });
+    }
+  } else if (email != sessionEmail) {
+    // email을 바꾼 경우
+    if (await User.exists({ email })) {
+      return res.status(400).render("edit-profile", {
+        pageTitle: "Error",
+        errorMessage: "This email is already taken.",
+      });
+    }
+  }
+
+  // UPDATA DB User
+  // await User.findByIdAndUpdate(_id, {
+  //   name,
+  //   email,
+  //   username,
+  //   location,
+  // });
+  //// UPDATAE session
+  // 방법 1 : User 업데이트, session 따로 업데이트
+  // req.session.user = {
+  //   ...req.session.user,
+  //   name,
+  //   email,
+  //   username,
+  //   location,
+  // };
+  // return res.redirect("/users/edit");
+
+  // 방법 2
+  const updateUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true } // findByIdAndUpdate가 바뀐 객체를 반환
+  );
+  req.session.user = updateUser;
+  return res.redirect("/users/edit");
+};
+
 export const see = (req, res) => res.send("See User");
