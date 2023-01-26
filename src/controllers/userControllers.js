@@ -43,18 +43,18 @@ export const getLogin = (req, res) =>
   res.render("login", { pageTitle: "Login" });
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
-  const pateTitle = "Login";
+  const pageTitle = "Login";
   const user = await User.findOne({ username });
   if (!user) {
     return res.status(400).render("login", {
-      pateTitle,
+      pageTitle,
       errorMessage: "An account with this username does not exists",
     });
   }
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
     return res.status(400).render("login", {
-      pateTitle,
+      pageTitle,
       errorMessage: "Wrong password",
     });
   }
