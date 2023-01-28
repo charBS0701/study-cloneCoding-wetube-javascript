@@ -7,7 +7,7 @@ export const localsMiddleware = (req, res, next) => {
   res.locals.loggedIn = Boolean(req.session.loggedIn);
   res.locals.siteName = "Wetube";
   res.locals.loggedInUser = req.session.user || {}; // 로그인안돼있으면 빈 객체 할당
-  console.log(req.session.user);
+  // console.log(req.session.user);
   next();
 };
 
