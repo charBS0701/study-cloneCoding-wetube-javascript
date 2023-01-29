@@ -157,8 +157,9 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id, username: sessionUsername, email: sessionEmail },
+      user: { _id, username: sessionUsername, email: sessionEmail, avatarUrl },
     },
+    file,
     body: { name, email, username, location },
   } = req; // const id = req.session.user.id 와 동일
   // const { name, email, username, location } = req.body; 도 함께 넣을 수 있음
@@ -199,11 +200,11 @@ export const postEdit = async (req, res) => {
   //   location,
   // };
   // return res.redirect("/users/edit");
-
   // 방법 2
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl,
       name,
       email,
       username,
