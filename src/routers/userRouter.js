@@ -25,7 +25,7 @@ userRouter
   .post(avatarUpload.single("avatar"), postEdit);
 userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleware, finishGithubLogin);
-userRouter.get(":id", see);
+userRouter.get("/:id", see);
 userRouter
   .route("/change-password")
   .all(protectorMiddleware)
