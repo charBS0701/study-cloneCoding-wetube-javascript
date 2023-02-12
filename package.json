@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/charBS0701/wetube-reloaded#readme",
   "dependencies": {
+    "@ffmpeg/core": "^0.11.0",
+    "@ffmpeg/ffmpeg": "^0.11.6",
     "bcrypt": "^5.1.0",
     "connect-mongo": "^4.6.0",
     "dotenv": "^16.0.3",

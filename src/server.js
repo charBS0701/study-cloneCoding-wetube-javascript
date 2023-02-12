@@ -29,6 +29,11 @@ app.use(
   })
 );
 
+app.use((req, res, next) => { // solving record video mp4 transcode error 
+  res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  res.header("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+  });
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));
