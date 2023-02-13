@@ -69,13 +69,15 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
-  const { path: fileUrl } = req.file;
+  const { video, thumb } = req.files;
+  console.log(video, thumb);
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: Video.changePathFormula(video[0].path), // 함수로 \\을 /로 변경
+      thumbUrl: thumb[0].path.replace(/[\\]/g, "/"), // 위와같은 동작
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
