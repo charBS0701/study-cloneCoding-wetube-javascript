@@ -4,6 +4,7 @@ import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import session from "express-session";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import { localsMiddleware } from "./middlewares";
 import apiRouter from "./routers/apiRouter";
@@ -28,12 +29,13 @@ app.use(
     }),
   })
 );
-
-app.use((req, res, next) => { // solving record video mp4 transcode error 
+app.use(flash());
+app.use((req, res, next) => {
+  // solving record video mp4 transcode error
   res.header("Cross-Origin-Embedder-Policy", "require-corp");
   res.header("Cross-Origin-Opener-Policy", "same-origin");
   next();
-  });
+});
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));
