@@ -35,6 +35,7 @@
     "short-uuid": "^4.2.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.20.7",
     "@babel/core": "^7.20.12",
     "@babel/node": "^7.18.10",
     "@babel/preset-env": "^7.20.2",

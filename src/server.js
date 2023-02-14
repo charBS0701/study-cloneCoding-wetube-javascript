@@ -16,7 +16,8 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 // setup the logger
 // app.use(logger);
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true })); // 서버가 form으로 오는 data를 이해하도록
+app.use(express.json()); //string을 JS object로 바꿔줌, headers: { "Content-type": "application/json" }인 request만 express.json()을 실행
 
 app.use(
   session({
