@@ -100,14 +100,19 @@ export const deleteVideo = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
-  const video = Video.findById(id);
+  const video = await Video.findById(id);
+  const user = await User.findById(_id);
+
   if (!video) {
     return res.status(400).render("404", { pageTitle: "Video not found" });
   }
   if (String(video.owner) !== String(_id)) {
     return res.status(403).redirect("/");
   }
+  user.videos.remove(id); // user의 videos에서 제거
+  user.save();
   await Video.findByIdAndDelete(id);
+
   return res.redirect("/");
 };
 
@@ -137,7 +142,9 @@ export const registerView = async (req, res) => {
 
 export const createComment = async (req, res) => {
   const {
-    session: { user },
+    session: {
+      user: { _id },
+    },
     params: { id },
     body: { text },
   } = req;
@@ -148,30 +155,47 @@ export const createComment = async (req, res) => {
   }
   const comment = await Comment.create({
     text,
-    owner: user._id,
+    owner: _id,
     video: id,
   });
+  // video의 comments에 추가
   video.comments.push(comment._id);
   video.save();
+
+  // user의 comments에 추가
+  const user = await User.findById(_id);
+  user.comments.push(comment._id);
+  user.save();
+
   return res.status(201).json({ newCommentId: comment._id });
 };
 
 export const deleteComment = async (req, res) => {
   const {
     params: { id },
-    session: { user },
+    session: {
+      user: { _id },
+    },
   } = req;
   const comment = await Comment.findById(id);
 
   if (!comment) {
     return res.status(400).render("404", { pageTitle: "Comment not found" });
   }
-
-  if (String(user._id) !== String(comment.owner)) {
+  if (String(_id) !== String(comment.owner)) {
     req.flash("error", "You are not the owner of the comment.");
     return res.status(403).redirect("/");
   }
   // Video 에서 comment 지우기
-  await comment.remove();
+  const video = await Video.findById(comment.video);
+  video.comments.remove(id);
+  video.save();
+
+  // User에서 comment 지우기
+  const user = await User.findById(_id);
+  user.comments.remove(id);
+  user.save();
+
+  await comment.remove(); // db에서 comment 삭제
   return res.status(201).json();
 };
