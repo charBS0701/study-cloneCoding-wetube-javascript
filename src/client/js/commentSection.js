@@ -1,8 +1,9 @@
 const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
+const deleteCommentsBtn = document.querySelectorAll(".commentDeleteBtn");
+const videoComments = document.querySelector(".video__comments ul");
 
 const addComment = (text, id) => {
-  const videoComments = document.querySelector(".video__comments ul");
   const newComment = document.createElement("li");
   newComment.dataset.id = id;
   newComment.className = "video__comment";
@@ -11,11 +12,17 @@ const addComment = (text, id) => {
   const span = document.createElement("span");
   span.innerText = ` ${text}`;
   const span2 = document.createElement("span");
+  span2.className = "commentDeleteBtn";
   span2.innerText = "❌";
+  // span2 id, class, dataset 등 추가
   newComment.appendChild(icon);
   newComment.appendChild(span);
   newComment.appendChild(span2);
   videoComments.prepend(newComment);
+
+  // newComment 댓글삭제
+  const newCommentDeleteBtn = document.querySelector(".commentDeleteBtn");
+  newCommentDeleteBtn.addEventListener("click", handleDeleteComment);
 };
 const handleSubmit = async (event) => {
   event.preventDefault(); // 브라우저가 항상 하는 동작을 멈추게함
@@ -39,6 +46,24 @@ const handleSubmit = async (event) => {
   }
 };
 
+const handleDeleteComment = async (event) => {
+  const comment = event.target.parentNode;
+  const commentId = comment.dataset.id;
+
+  const response = await fetch(`/api/comments/${commentId}`, {
+    method: "DELETE",
+  });
+  if (response.status === 201) {
+    comment.parentNode.removeChild(comment);
+  }
+};
+
 if (form) {
   form.addEventListener("submit", handleSubmit);
+}
+if (deleteCommentsBtn) {
+  console.log(deleteCommentsBtn);
+  deleteCommentsBtn.forEach((deleteCommentBtn) => {
+    deleteCommentBtn.addEventListener("click", handleDeleteComment);
+  });
 }

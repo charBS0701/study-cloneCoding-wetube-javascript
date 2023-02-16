@@ -155,3 +155,23 @@ export const createComment = async (req, res) => {
   video.save();
   return res.status(201).json({ newCommentId: comment._id });
 };
+
+export const deleteComment = async (req, res) => {
+  const {
+    params: { id },
+    session: { user },
+  } = req;
+  const comment = await Comment.findById(id);
+
+  if (!comment) {
+    return res.status(400).render("404", { pageTitle: "Comment not found" });
+  }
+
+  if (String(user._id) !== String(comment.owner)) {
+    req.flash("error", "You are not the owner of the comment.");
+    return res.status(403).redirect("/");
+  }
+  // Video 에서 comment 지우기
+  await comment.remove();
+  return res.status(201).json();
+};
