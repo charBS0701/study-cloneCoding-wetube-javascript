@@ -74,12 +74,17 @@ export const postUpload = async (req, res) => {
   } = req.session;
   const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
+  const isHeroku = process.env.NODE_ENV === "production";
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl: Video.changePathFormula(video[0].path), // 함수로 \\을 /로 변경
-      thumbUrl: thumb[0].path.replace(/[\\]/g, "/"), // 위와같은 동작
+      fileUrl: isHeroku
+        ? Video.changePathFormula(video[0].location)
+        : Video.changePathFormula(video[0].path), // 함수로 \\을 /로 변경
+      thumbUrl: isHeroku
+        ? thumb[0].location.replace(/[\\]/g, "/")
+        : thumb[0].path.replace(/[\\]/g, "/"), // 위와같은 동작
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });

@@ -33,8 +33,11 @@ app.use(
 app.use(flash());
 app.use((req, res, next) => {
   // solving record video mp4 transcode error
-  res.header("Cross-Origin-Embedder-Policy", "require-corp");
-  res.header("Cross-Origin-Opener-Policy", "same-origin");
+  // res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  // res.header("Cross-Origin-Opener-Policy", "same-origin");
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "content-type");
   next();
 });
 app.use(localsMiddleware);
