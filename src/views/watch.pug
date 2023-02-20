@@ -2,7 +2,10 @@ extends base.pug
 
 block content
     div#videoContainer(data-Id=video._id)
-        video(src="/" + video.fileUrl)
+        if isHeroku
+            video(src=video.fileUrl)
+        else
+            video(src="/" + video.fileUrl)
         div#videoControls.videoControls
             div.videoControls__play
                 span#play.videoControls__playBtn
