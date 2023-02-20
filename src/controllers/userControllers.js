@@ -126,7 +126,7 @@ export const finishGithubLogin = async (req, res) => {
     // db에 일지하는 email 없으면 socialOnly로 추가
     if (!user) {
       user = await User.create({
-        avatarUrl: userData.avatarUrl,
+        avatarUrl: userData.avatar_url,
         name: userData.name,
         username: userData.login,
         email: emailObj.email,
